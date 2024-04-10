@@ -1,11 +1,30 @@
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import numpy as np
+from keras.models import load_model
+from keras.preprocessing import image
 
-app = Flask(__name__)
+app = Flask(_name_)
+CORS(app)
 
-@app.route('/api/data', methods=['GET'])
-def get_data():
-    data = {"message": "Hello from Flask!"}
-    return jsonify(data)
+model = load_model('skin_disease_model_efficientnet.h5')
+class_labels = ['Melanoma', 'Melanocytic Nevi', 'Basal Cell Carcinoma', 'Actinic Keratosis']
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+@app.route('/predict', methods=['POST'])
+def predict():
+    file = request.files['image']
+    img = image.load_img(file, target_size=(224, 224))
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array /= 255.0
+    predictions = model.predict(img_array)
+    predicted_class_index = np.argmax(predictions[0])
+    predicted_class_label = class_labels[predicted_class_index]
+    response = {
+        'class_index': int(predicted_class_index),
+        'class_label': predicted_class_label
+    }
+    return jsonify(response)
+
+if _name_ == '_main_':
+    app.run()
