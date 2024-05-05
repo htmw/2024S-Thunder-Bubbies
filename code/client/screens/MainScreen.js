@@ -1,10 +1,44 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 
 export default function MainScreen({ navigation }) {
-  const handleUploadPhoto = () => {
-    console.log("Upload photo");
+  const [imageUri, setImageUri] = useState(null);
+  const [result, setResult] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+      }
+    })();
+  }, []);
+
+  const handleUploadPhoto = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log("Image Picker Result:", result); // Log the entire result object
+
+    if (!result.cancelled) {
+      const selectedAsset = result.assets[0];
+      if (selectedAsset) {
+        const imageUri = selectedAsset.uri;
+        setImageUri(imageUri);
+        setResult(result); // Set the result object in the state
+        console.log("Selected Image URI:", imageUri); // Log the selected image URI
+        navigation.navigate("ImagePreview", { imageUri, result }); // Pass the result object
+      } else {
+        console.log("No image asset found"); // Log a message if no asset is found
+      }
+    }
   };
 
   const handleTakePhoto = () => {
@@ -22,10 +56,8 @@ export default function MainScreen({ navigation }) {
           <FontAwesome name="user-circle" size={24} color="#000" />
         </TouchableOpacity>
       </View>
-
       <View style={styles.contentContainer}>
         <Text style={styles.subtitle}>Next-gen Skin Diagnosis Application</Text>
-
         <View style={styles.iconContainer}>
           <TouchableOpacity
             style={styles.iconButton}
