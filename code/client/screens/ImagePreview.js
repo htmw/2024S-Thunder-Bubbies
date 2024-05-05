@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Image, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Image, StyleSheet, ActivityIndicator } from "react-native";
 
 export default function ImagePreview({ route, navigation }) {
   const { imageUri, result } = route.params;
@@ -20,7 +20,6 @@ export default function ImagePreview({ route, navigation }) {
       </View>
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#3498db" />
-        <Text style={styles.loadingText}>Diagnosing please wait...</Text>
       </View>
     </View>
   );
@@ -56,10 +55,5 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     alignItems: "center",
-  },
-  loadingText: {
-    fontSize: 18,
-    marginTop: 10,
-    color: "#333",
   },
 });
