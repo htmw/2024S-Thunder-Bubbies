@@ -14,13 +14,11 @@ export default function FeedbackScreen({ route, navigation }) {
   const [feedback, setFeedback] = useState("");
 
   const handleFeedbackSubmit = () => {
-    // Handle feedback submission logic here
     const feedbackData = {
       displayedName,
       feedback,
     };
 
-    // Simulating feedback submission
     Alert.alert(
       "Feedback Submitted",
       `Detected Name: ${feedbackData.displayedName}\nFeedback: ${feedbackData.feedback}`,
@@ -31,9 +29,10 @@ export default function FeedbackScreen({ route, navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Feedback Form</Text>
-      <Text style={styles.detectedNameText}>
-        Detected Name: {displayedName}
-      </Text>
+      <View style={styles.detectedNameContainer}>
+        <Text style={styles.detectedNameLabel}>Detected Name:</Text>
+        <Text style={styles.detectedNameText}>{displayedName}</Text>
+      </View>
       <TextInput
         style={styles.input}
         placeholder="Enter your feedback"
@@ -61,33 +60,46 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 30,
     textAlign: "center",
+    color: "#333",
+  },
+  detectedNameContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  detectedNameLabel: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginRight: 10,
+    color: "#333",
   },
   detectedNameText: {
     fontSize: 18,
-    marginBottom: 10,
-    textAlign: "center",
+    color: "#666",
   },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    padding: 10,
-    marginBottom: 20,
+    padding: 15,
+    marginBottom: 30,
     textAlignVertical: "top",
-    height: 120,
+    height: 150,
+    fontSize: 16,
+    color: "#333",
   },
   submitButton: {
-    backgroundColor: "#000",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    backgroundColor: "#3498db",
+    paddingVertical: 15,
+    paddingHorizontal: 30,
     borderRadius: 5,
     alignSelf: "center",
   },
   submitButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
 });
