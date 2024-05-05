@@ -1,4 +1,3 @@
-// ResultScreen.js
 import React from "react";
 import {
   View,
@@ -17,12 +16,9 @@ export default function ResultScreen({ route, navigation }) {
   let displayedName = detectedName;
   let description = "";
 
-  // Check if result is not null or undefined
   if (result) {
-    // Extract the file name from the assets array
     const imageFileName = result.assets[0]?.fileName;
 
-    // Check if imageFileName is not null or undefined and matches the expected file name
     if (imageFileName === "IMG_1191.JPG") {
       displayedName = "Melanoma";
       description =
@@ -36,23 +32,27 @@ export default function ResultScreen({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.navigate("Main")}
-      >
-        <Ionicons name="chevron-back" size={24} color="#000" />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.profileButton}
-        onPress={() => navigation.navigate("Profile")}
-      >
-        <Ionicons name="person-circle-outline" size={24} color="#000" />
-      </TouchableOpacity>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.navigate("Main")}
+        >
+          <Ionicons name="chevron-back" size={28} color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Skin Analysis Result</Text>
+        <TouchableOpacity
+          style={styles.profileButton}
+          onPress={() => navigation.navigate("Profile")}
+        >
+          <Ionicons name="person-circle-outline" size={28} color="#fff" />
+        </TouchableOpacity>
+      </View>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Image source={{ uri: imageUri }} style={styles.image} />
-        <Text style={styles.detectedText}>Detected: {displayedName}</Text>
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: imageUri }} style={styles.image} />
+        </View>
+        <Text style={styles.detectedText}>{displayedName}</Text>
         <Text style={styles.description}>{description}</Text>
 
         <TouchableOpacity
@@ -71,47 +71,53 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  scrollContainer: {
+  header: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#3498db",
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  scrollContainer: {
     paddingHorizontal: 20,
     paddingBottom: 40,
   },
-  backButton: {
-    position: "absolute",
-    top: 60,
-    left: 20,
-    zIndex: 1,
-  },
-  profileButton: {
-    position: "absolute",
-    top: 60,
-    right: 20,
-    zIndex: 1,
+  imageContainer: {
+    alignItems: "center",
+    marginTop: 30,
+    marginBottom: 20,
   },
   image: {
-    width: "100%",
-    height: 300,
+    width: 200,
+    height: 200,
     resizeMode: "contain",
-    marginTop: 100,
   },
   detectedText: {
     fontSize: 24,
     fontWeight: "bold",
-    marginTop: 20,
+    marginBottom: 20,
+    color: "#333",
     textAlign: "center",
   },
   description: {
     fontSize: 16,
-    marginTop: 20,
+    lineHeight: 24,
+    color: "#666",
     textAlign: "justify",
   },
   feedbackButton: {
     backgroundColor: "#3498db",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
     borderRadius: 5,
-    marginTop: 20,
+    marginTop: 30,
+    alignSelf: "center",
   },
   feedbackButtonText: {
     color: "#fff",
