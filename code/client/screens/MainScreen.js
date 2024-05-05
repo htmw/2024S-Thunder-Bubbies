@@ -25,24 +25,49 @@ export default function MainScreen({ navigation }) {
       quality: 1,
     });
 
-    console.log("Image Picker Result:", result); // Log the entire result object
+    console.log("Image Picker Result:", result);
 
     if (!result.cancelled) {
       const selectedAsset = result.assets[0];
       if (selectedAsset) {
         const imageUri = selectedAsset.uri;
         setImageUri(imageUri);
-        setResult(result); // Set the result object in the state
-        console.log("Selected Image URI:", imageUri); // Log the selected image URI
-        navigation.navigate("ImagePreview", { imageUri, result }); // Pass the result object
+        setResult(result);
+        console.log("Selected Image URI:", imageUri);
+        navigation.navigate("ImagePreview", { imageUri, result });
       } else {
-        console.log("No image asset found"); // Log a message if no asset is found
+        console.log("No image asset found");
       }
     }
   };
 
-  const handleTakePhoto = () => {
-    console.log("Take photo");
+  const handleTakePhoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status === "granted") {
+      let result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      console.log("Camera Result:", result);
+
+      if (!result.cancelled) {
+        const selectedAsset = result.assets[0];
+        if (selectedAsset) {
+          const imageUri = selectedAsset.uri;
+          setImageUri(imageUri);
+          setResult(result);
+          console.log("Captured Image URI:", imageUri);
+          navigation.navigate("ImagePreview", { imageUri, result });
+        } else {
+          console.log("No image captured");
+        }
+      }
+    } else {
+      alert("Sorry, we need camera permissions to make this work!");
+    }
   };
 
   return (
