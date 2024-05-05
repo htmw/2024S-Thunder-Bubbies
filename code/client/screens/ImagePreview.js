@@ -1,22 +1,27 @@
 import React, { useEffect } from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
+import { View, Image, Text, StyleSheet, ActivityIndicator } from "react-native";
 
 export default function ImagePreview({ route, navigation }) {
   const { imageUri, result } = route.params;
 
   useEffect(() => {
     const simulateLoading = setTimeout(() => {
-      const detectedName = "Skin Condition Name"; // Replace with your actual detection logic
-      navigation.navigate("ResultScreen", { imageUri, detectedName, result }); // Pass the result object
+      const detectedName = "Skin Condition Name";
+      navigation.navigate("ResultScreen", { imageUri, detectedName, result });
     }, 5000);
 
     return () => clearTimeout(simulateLoading);
-  }, [navigation, imageUri, result]); // Add result to the dependency array
+  }, [navigation, imageUri, result]);
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: imageUri }} style={styles.image} />
-      <Text style={styles.loadingText}>Diagonising please wait...</Text>
+      <View style={styles.imageContainer}>
+        <Image source={{ uri: imageUri }} style={styles.image} />
+      </View>
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#3498db" />
+        <Text style={styles.loadingText}>Diagnosing please wait...</Text>
+      </View>
     </View>
   );
 }
@@ -27,14 +32,34 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",
+    paddingHorizontal: 20,
+  },
+  imageContainer: {
+    width: "100%",
+    height: 300,
+    borderRadius: 10,
+    overflow: "hidden",
+    marginBottom: 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   image: {
     width: "100%",
-    height: 300,
-    resizeMode: "contain",
+    height: "100%",
+    resizeMode: "cover",
+  },
+  loadingContainer: {
+    alignItems: "center",
   },
   loadingText: {
     fontSize: 18,
-    marginTop: 20,
+    marginTop: 10,
+    color: "#333",
   },
 });
